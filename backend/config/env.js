@@ -9,4 +9,6 @@ export const { PORT ,
                DB_URI ,
                CLOUD_NAME ,
                API_KEY ,
-               API_SECRET} = process.env;
+               API_SECRET ,
+               JWT_SECRET ,
+               JWT_EXPIRES_IN } = process.env;
