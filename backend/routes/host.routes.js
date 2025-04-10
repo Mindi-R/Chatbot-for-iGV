@@ -1,10 +1,13 @@
 import { Router } from 'express';
+import { getAllHosts , getHostById } from '../controllers/host.controller.js';
+import authorize from '../middleware/auth.middleware.js';   
+
 
 const hostRouter = Router();
 
-hostRouter.get('/', (req,res) => res.send ({'message': 'GET all hosts'}));
+hostRouter.get('/', getAllHosts);
 
-hostRouter.get('/:id', (req,res) => res.send({'message': `GET host with id ${req.params.id}`}));
+hostRouter.get('/:id', authorize , getHostById);
 
 hostRouter.post('/', (req,res) => res.send({'message': 'CREATE new host'}));
 
