@@ -115,4 +115,5 @@ export const signIn = async ( req , res , next) => {
     }
 }
 
+// eslint-disable-next-line no-unused-vars
 export const signOut = async ( req , res , next) => {}
