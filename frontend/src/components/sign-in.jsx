@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 function SignIn() {
   const [email, setEmail] = useState('');
@@ -19,7 +20,6 @@ function SignIn() {
           withCredentials: true, 
         }
       );
-
       localStorage.setItem("token", res.data.data.token);
 
       setMessage('Signed in successfully!');
@@ -58,6 +58,7 @@ function SignIn() {
         <button type="submit" style={{ width: '100%' }}>Sign In</button>
       </form>
       <p>{message}</p>
+      <p>Don't have an account? <Link to="/sign-up">Sign up here</Link></p>
     </div>
   );
 }
