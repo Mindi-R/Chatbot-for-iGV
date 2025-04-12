@@ -2,7 +2,11 @@ import mongoose from "mongoose";
 import Host from "../models/host.model.js";
 import bycrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { JWT_SECRET, JWT_EXPIRES_IN } from "../config/env.js";
+// import { JWT_SECRET, JWT_EXPIRES_IN } from "../config/env.js";
+
+const createToken = (id) => {
+    return jwt.sign({id}, process.env.JWT_SECRET)
+}
 
 export const signUp = async ( req , res , next) => {
     const session = await mongoose.startSession();
@@ -14,9 +18,7 @@ export const signUp = async ( req , res , next) => {
         const existingUser = await Host.findOne({ email });
 
         if (existingUser){
-            const error = new Error('User already exists');
-            error.statusCode = 409;
-            throw error;
+            return res.json({success: false, message: 'User already exists!'});
         }
 
         //Hash the password
@@ -30,13 +32,13 @@ export const signUp = async ( req , res , next) => {
             password: hashedPassword,
             boardingAddressForApproval,
             boardingImageForApproval,
+            status: 'pending',
         }], { session });
-
-        // Generate a JWT token
-        const token = jwt.sign({ id: newHosts[0]._id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 
         await session.commitTransaction();
         session.endSession();
+
+        const token = createToken(user._id);
 
         res.status(201).json({
             sucess: true,
@@ -52,7 +54,6 @@ export const signUp = async ( req , res , next) => {
         session.endSession();
         return next(error);
     }
-
 
 }
 

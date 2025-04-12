@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function SignUp() {
   const [formData, setFormData] = useState({
@@ -64,11 +65,16 @@ function SignUp() {
     };
 
     try {
-      const res = await axios.post('http://localhost:5500/api/v1/auth/sign-up', updatedFormData, {
-        withCredentials: true
-      });
+      const res = await axios.post('http://localhost:5500/api/user/sign-up', updatedFormData);
       console.log(res.data);
-      setMessage(res.data.message || 'Signed up successfully! Await approval.');
+      
+      if (res.data.success){         // If the user is successfully registered
+        setToken(res.data.token);
+        localStorage.setItem('token', res.data.token);    // Storing the token in the local storage
+      }
+      else{
+        toast.error(res.data.message);
+      }
     } catch (err) {
       console.error(err);
       setMessage(err.response?.data?.message || 'Sign up failed!');

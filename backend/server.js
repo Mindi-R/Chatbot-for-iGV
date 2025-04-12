@@ -7,7 +7,7 @@ import boardingRouter from './routes/boarding.routes.js';
 import hostRouter from './routes/host.routes.js';   
 
 const app = express();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 5500;
 connectToDatabase();
     // connect to cloudinary
 

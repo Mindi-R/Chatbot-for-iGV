@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-
 const  hostSchema = new mongoose.Schema({
     username:{
         type:String,
