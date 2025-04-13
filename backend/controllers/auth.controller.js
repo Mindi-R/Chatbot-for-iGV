@@ -35,10 +35,10 @@ export const signUp = async ( req , res , next) => {
             status: 'pending',
         }], { session });
 
+        const token = createToken(newHosts._id);
+
         await session.commitTransaction();
         session.endSession();
-
-        const token = createToken(user._id);
 
         res.status(201).json({
             sucess: true,
