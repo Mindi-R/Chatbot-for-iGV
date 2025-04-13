@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import Host from "../models/host.model.js";
-import bycrypt from "bcryptjs";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 // import { JWT_SECRET, JWT_EXPIRES_IN } from "../config/env.js";
 
@@ -22,8 +22,8 @@ export const signUp = async ( req , res , next) => {
         }
 
         //Hash the password
-        const salt = await bycrypt.genSalt(10);
-        const hashedPassword = await bycrypt.hash(password, salt);  
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);  
 
         // Create a new host
         const newHosts = await Host.create([{
@@ -35,26 +35,18 @@ export const signUp = async ( req , res , next) => {
             status: 'pending',
         }], { session });
 
+        const token = createToken(newHosts._id);
+
         await session.commitTransaction();
         session.endSession();
 
-        const token = createToken(user._id);
-
-        res.status(201).json({
-            sucess: true,
-            message: 'Host created successfully. Await Approval',
-            data:{
-                token,
-                host:newHosts[0]               
-            }
-        })
+        return res.json({ sucess: true, message: 'Host created successfully. Await Approval', data:{ token, host:newHosts[0] }});
 
     }catch(error){
         await session.abortTransaction();
         session.endSession();
-        return next(error);
+        res.json({success:false, message:error.message});
     }
-
 }
 
 export const signIn = async ( req , res , next) => {
@@ -65,54 +57,39 @@ export const signIn = async ( req , res , next) => {
         const host = await Host.findOne({ email });
 
         if(!host){
-            const error = new Error('Host not found');
-            error.statusCode = 404;
-            throw error;
+            return res.json({success:false, message:"User not found!"});
         }
 
         // Check if the host is approved
         if(host.status !== 'approved'){
-            const error = new Error('Host not approved yet');
-            error.statusCode = 403;
-            throw error;
+            return res.json({success:false, message:"Host not approved yet!"});
         }
+
         // Check if the host is rejected
         if(host.status === 'rejected'){
-            const error = new Error('Host rejected');
-            error.statusCode = 403;
-            throw error;
+            return res.json({success:false, message:"Host is rejected!"});
         }
+
         // Check if the host is pending
         if(host.status === 'pending'){
-            const error = new Error('Host pending');
-            error.statusCode = 403;
-            throw error;
+            return res.json({success:false, message:"Host is pending!"});
         }
 
         // Check if the password is correct
-        const isPasswordCorrect = await bycrypt.compare(password, host.password);
+        const isPasswordCorrect = await bcrypt.compare(password, host.password);
 
         // If the password is incorrect
         if(!isPasswordCorrect){
-            const error = new Error('Invalid password!');
-            error.statusCode = 401;
-            throw error;
+            return res.json({success:false, message:"Invalid credentials!"});
         }
 
         // Generate a JWT token
-        const token = jwt.sign({ hostId: host._id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+        const token = createToken(host._id);
 
-        res.status(200).json({
-            success: true,
-            message: 'Host signed in successfully',
-            data: {
-                token,
-                host
-            }
-        });
+        return res.json({success:true, message:"Logged in successfully!", data:{ token, host }});
 
     }catch(error){
-        return next(error);
+        res.json({success:false, message:error.message});
     }
 }
 
