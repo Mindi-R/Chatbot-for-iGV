@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../config/env.js';
+// import { JWT_SECRET } from '../config/env.js';
 import Host from '../models/host.model.js';
 
 const authorize = async (req, res, next) => {

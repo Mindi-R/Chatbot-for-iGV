@@ -1,30 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [token, setToken] = useState('');
+
+  const navigate = useNavigate();
 
   const handleSignIn = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
-        'http://localhost:5500/api/v1/auth/sign-in',
-        {
-          email,
-          password,
-        },
-        {
-          withCredentials: true, 
-        }
-      );
-      localStorage.setItem("token", res.data.data.token);
+      const res = await axios.post('http://localhost:5500/api/user/sign-in', {email, password} );
+      // console.log(res.data.data.token);
 
-      setMessage('Signed in successfully!');
-      console.log('Sign-in response:', res.data);
-    } catch (err) {
+      if (res.data.success) {
+        setToken(res.data.data.token);
+        localStorage.setItem('token', res.data.data.token);
+        toast.success('Sign-in successful!');
+        setMessage('Sign-in successful!');
+      }
+      else {
+        toast.error(res.data.message);
+      }
+    } 
+    catch (err) {
       if (err.response) {
         console.error('Server responded with:', err.response.data);
         setMessage(err.response.data.message || 'Sign in failed!');
@@ -34,6 +37,12 @@ function SignIn() {
       }
     }
   };
+
+  useEffect(() => {
+    if (token) {
+      navigate('/host-profile');
+    }
+  }, [token])
 
   return (
     <div style={{ maxWidth: '400px', margin: '0 auto', padding: '1rem' }}>
