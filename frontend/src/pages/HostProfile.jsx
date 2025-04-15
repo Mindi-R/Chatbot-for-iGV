@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import AddBoarding from "../components/addBoarding";
+import ListBoarding from "../components/listBoarding";
 
 const HostProfile = () => {
   const [name, setName] = useState("");
@@ -12,7 +13,11 @@ const HostProfile = () => {
 
   const fetchHostProfile = async () => {
     try {
-      const response = await axios.post( "http://localhost:5500/api/user/host-profile", {}, { headers: { token: localStorage.getItem("token") }});
+      const response = await axios.post(
+        "http://localhost:5500/api/user/host-profile",
+        {},
+        { headers: { token: localStorage.getItem("token") } }
+      );
 
       if (response.data.success) {
         setName(response.data.data.username);
@@ -77,22 +82,41 @@ const HostProfile = () => {
           </h3>
           <p style={{ color: "#7f8c8d" }}>{email || "your@email.com"}</p>
 
-          <button
-            onClick={handleSignOut}
-            style={{
-              marginTop: "1rem",
-              padding: "0.6rem 1.2rem",
-              backgroundColor: "#e74c3c",
-              color: "#fff",
-              border: "none",
-              borderRadius: "8px",
-              cursor: "pointer",
-              fontSize: "1rem",
-              transition: "background 0.3s",
-            }}
-          >
-            Sign Out
-          </button>
+          {localStorage.getItem("token") ? (
+            <button
+              onClick={handleSignOut}
+              style={{
+                marginTop: "1rem",
+                padding: "0.6rem 1.2rem",
+                backgroundColor: "#e74c3c",
+                color: "#fff",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                fontSize: "1rem",
+                transition: "background 0.3s",
+              }}
+            >
+              Sign Out
+            </button>
+          ) : (
+            <button
+              onClick={() => navigate("/sign-in")}
+              style={{
+                marginTop: "1rem",
+                padding: "0.6rem 1.2rem",
+                backgroundColor: "#2ecc71",
+                color: "#fff",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                fontSize: "1rem",
+                transition: "background 0.3s",
+              }}
+            >
+              Sign In
+            </button>
+          )}
         </div>
 
         {/* Divider */}
@@ -100,7 +124,7 @@ const HostProfile = () => {
           style={{
             width: "2px",
             backgroundColor: "#ccc",
-            height: "100vh", 
+            height: "100vh",
             margin: "0 2rem",
           }}
         ></div>
@@ -111,6 +135,7 @@ const HostProfile = () => {
             Your Boarding Details
           </h2>
           <AddBoarding />
+          <ListBoarding />
         </div>
       </div>
 
