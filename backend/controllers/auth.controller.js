@@ -8,7 +8,7 @@ const createToken = (id) => {
     return jwt.sign({id}, process.env.JWT_SECRET)
 }
 
-export const signUp = async ( req , res , next) => {
+const signUp = async ( req , res , next) => {
     const session = await mongoose.startSession();
     session.startTransaction();
     try{
@@ -45,11 +45,11 @@ export const signUp = async ( req , res , next) => {
     }catch(error){
         await session.abortTransaction();
         session.endSession();
-        res.json({success:false, message:error.message});
+        return res.json({success:false, message:error.message});
     }
 }
 
-export const signIn = async ( req , res , next) => {
+const signIn = async ( req , res , next) => {
     try{
         const { email , password } = req.body;
 
@@ -89,9 +89,38 @@ export const signIn = async ( req , res , next) => {
         return res.json({success:true, message:"Logged in successfully!", data:{ token, host }});
 
     }catch(error){
-        res.json({success:false, message:error.message});
+        return res.json({success:false, message:error.message});
     }
 }
 
+const fetchHostData = async (req, res) => {
+    try {
+        const token = req.headers.token;
+
+        if (!token) {
+            return res.status(401).json({ success: false, message: "Unauthorized" });
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.id;
+
+        const hostData = await Host.findById(userId); // Or use Host.findOne({_id: userId}) if needed
+
+        if (!hostData) {
+            return res.status(404).json({ success: false, message: "Host not found" });
+        }
+
+        res.json({ success: true, data: hostData });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: "Server error" });
+    }
+}
+
+
 // eslint-disable-next-line no-unused-vars
-export const signOut = async ( req , res , next) => {}
+const signOut = async ( req , res , next) => {
+
+}
+
+export {signIn, signUp, signOut, fetchHostData};
