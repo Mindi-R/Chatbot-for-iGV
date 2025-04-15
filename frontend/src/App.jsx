@@ -7,8 +7,6 @@ import SignUp from './components/sign-up.jsx';
 import SignIn from './components/sign-in.jsx';
 import Home from './pages/Home.jsx';
 import HostProfile from './pages/HostProfile.jsx';
-import AddBoarding from './components/addBoarding.jsx';
-import ListBoarding from './components/listBoarding.jsx';
 
 const App = () => {
   return (
@@ -18,8 +16,6 @@ const App = () => {
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/" element={<Home />} />
         <Route path="/host-profile" element={<HostProfile />} />
-        <Route path="/add-boarding" element={<AddBoarding />} />
-        <Route path="/list-boarding" element={<ListBoarding />} />
       </Routes>
       <ToastContainer
         position="top-right"
