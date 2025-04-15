@@ -32,4 +32,24 @@ const addBoarding = async (req, res) => {
     }
 }
 
-export { addBoarding };
+const listBoarding = async (req, res) => {
+    try {
+        const token = req.headers.token;
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const hostId = decoded.id;
+
+        const boardings = await boardingModel.find({hostId});
+
+        if (boardings.length === 0) {
+            return res.json({ success: false, message: "No boardings found" });
+        }
+
+        res.json({ success: true, data: boardings });
+    } 
+    catch (error) {
+        console.log(error);
+        res.json({success: false, message: error.message});
+    }
+}
+
+export { addBoarding, listBoarding };
