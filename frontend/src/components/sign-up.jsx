@@ -31,7 +31,7 @@ function SignUp() {
     setUploading(true);
     const data = new FormData();
     data.append("file", imageFile);
-    data.append("upload_preset", "imagesPendingApproval"); // 👈 use your unsigned preset name here
+    data.append("upload_preset", "imagesPendingApproval");
     data.append("folder", "imagesPendingApproval");
 
     try {
@@ -66,13 +66,10 @@ function SignUp() {
 
     try {
       const res = await axios.post('http://localhost:5500/api/user/sign-up', updatedFormData);
-      console.log(res.data);
-      
-      if (res.data.success){         // If the user is successfully registered
-        setToken(res.data.token);
-        localStorage.setItem('token', res.data.token);    // Storing the token in the local storage
-      }
-      else{
+      if (res.data.success) {
+        toast.success("Sign-up successful!");
+        setMessage("Sign-up successful!");
+      } else {
         toast.error(res.data.message);
       }
     } catch (err) {
@@ -81,23 +78,83 @@ function SignUp() {
     }
   };
 
+  const sharedInputStyle = {
+    width: "100%",
+    marginBottom: "1rem",
+    padding: "0.75rem",
+    border: "1px solid #ccc",
+    borderRadius: "8px",
+    fontSize: "1rem",
+    outline: "none",
+    transition: "border 0.3s",
+  };
+
+  const sharedButtonStyle = {
+    width: "100%",
+    padding: "0.75rem",
+    backgroundColor: "#222",
+    color: "white",
+    border: "none",
+    borderRadius: "8px",
+    fontSize: "1rem",
+    fontWeight: "bold",
+    cursor: "pointer",
+    transition: "background-color 0.3s",
+  };
+
   return (
-    <div>
-      <h2>Host Sign Up</h2>
+    <div
+      style={{
+        maxWidth: "400px",
+        margin: "5rem auto",
+        padding: "2rem",
+        backgroundColor: "#d4bf95",
+        borderRadius: "16px",
+        boxShadow: "0 8px 24px rgba(0, 0, 0, 0.15)",
+        fontFamily: "Segoe UI, sans-serif",
+      }}
+    >
+      <h2 style={{ textAlign: "center", color: "#2d2d2d", marginBottom: "1.5rem" }}>
+        Host Sign Up
+      </h2>
       <form onSubmit={handleSignUp}>
-        <input type="text" name="username" placeholder="Username" onChange={handleChange} required /><br />
-        <input type="email" name="email" placeholder="Email" onChange={handleChange} required /><br />
-        <input type="password" name="password" placeholder="Password" onChange={handleChange} required /><br />
-        <input type="text" name="boardingAddressForApproval" placeholder="Boarding Address" onChange={handleChange} required /><br />
-        
-        <input type="file" accept="image/*" onChange={handleImageChange} required /><br />
-        {uploading && <p>Uploading image...</p>}
-        <button type="submit" disabled={uploading}>Sign Up</button>
+        <input type="text" name="username" placeholder="Username" onChange={handleChange} required style={sharedInputStyle} />
+        <input type="email" name="email" placeholder="Email" onChange={handleChange} required style={sharedInputStyle} />
+        <input type="password" name="password" placeholder="Password" onChange={handleChange} required style={sharedInputStyle} />
+        <input type="text" name="boardingAddressForApproval" placeholder="Boarding Address" onChange={handleChange} required style={sharedInputStyle} />
+        <input type="file" accept="image/*" onChange={handleImageChange} required style={sharedInputStyle} />
+
+        {uploading && <p style={{ marginBottom: "1rem", color: "#444" }}>Uploading image...</p>}
+
+        <button
+          type="submit"
+          disabled={uploading}
+          style={sharedButtonStyle}
+          onMouseEnter={(e) => (e.target.style.backgroundColor = "#444")}
+          onMouseLeave={(e) => (e.target.style.backgroundColor = "#222")}
+        >
+          Sign Up
+        </button>
       </form>
-      <p>{message}</p>
 
-      <p>Already have an account? <Link to="/sign-in">Sign in here</Link></p>
+      {message && (
+        <p style={{ textAlign: "center", marginTop: "1rem", color: "#e74c3c" }}>{message}</p>
+      )}
 
+      <p style={{ textAlign: "center", marginTop: "1.5rem", fontSize: "0.95rem" }}>
+        Already have an account?{" "}
+        <Link
+          to="/sign-in"
+          style={{
+            color: "#222",
+            textDecoration: "underline",
+            fontWeight: "500",
+            transition: "color 0.3s ease",
+          }}
+        >
+          Sign in here
+        </Link>
+      </p>
     </div>
   );
 }
