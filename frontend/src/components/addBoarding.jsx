@@ -165,21 +165,41 @@ const AddBoarding = () => {
               required
               style={{ ...inputStyle, resize: "vertical" }}
             ></textarea>
-
             <div
               style={{
                 display: "flex",
                 justifyContent: "space-between",
                 gap: "1rem",
+                marginTop: "1rem",
               }}
             >
-              <button type="submit" style={submitButtonStyle}>
+              <button
+                type="submit"
+                style={submitButtonStyle}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = "#bfae7f";
+                  e.target.style.transform = "scale(1.05)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = "#d4bf95";
+                  e.target.style.transform = "scale(1)";
+                }}
+              >
                 Submit
               </button>
+
               <button
                 type="button"
                 onClick={() => setShowForm(false)}
                 style={cancelButtonStyle}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = "#95a5a6";
+                  e.target.style.transform = "scale(1.05)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = "#bdc3c7";
+                  e.target.style.transform = "scale(1)";
+                }}
               >
                 Cancel
               </button>
@@ -201,25 +221,27 @@ const inputStyle = {
 };
 
 const submitButtonStyle = {
-  padding: "0.6rem",
-  backgroundColor: "#27ae60",
-  color: "#fff",
+  padding: "0.6rem 1.2rem",
+  backgroundColor: "#d4bf95",
+  color: "#000",
   border: "none",
   borderRadius: "8px",
-  fontSize: "1rem",
   cursor: "pointer",
-  flex: 1,
+  fontWeight: "bold",
+  transition: "all 0.3s ease",
+  minWidth: "140px", // Increased width
 };
 
 const cancelButtonStyle = {
-  padding: "0.6rem",
-  backgroundColor: "#e0e0e0",
-  color: "#333",
+  padding: "0.6rem 1.2rem",
+  backgroundColor: "#bdc3c7",
+  color: "#2c3e50",
   border: "none",
   borderRadius: "8px",
-  fontSize: "1rem",
   cursor: "pointer",
-  flex: 1,
+  fontWeight: "bold",
+  transition: "all 0.3s ease",
+  minWidth: "140px", // Increased width
 };
 
 export default AddBoarding;

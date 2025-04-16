@@ -83,63 +83,64 @@ const HostProfile = () => {
           <p style={{ color: "#7f8c8d" }}>{email || "your@email.com"}</p>
 
           {localStorage.getItem("token") ? (
-  <button
-    onClick={handleSignOut}
-    style={{
-      marginTop: "1rem",
-      padding: "0.6rem 1.2rem",
-      backgroundColor: "#e74c3c",
-      color: "#fff",
-      border: "none",
-      borderRadius: "8px",
-      cursor: "pointer",
-      fontSize: "1rem",
-      transition: "background-color 0.3s, transform 0.3s, box-shadow 0.3s",
-      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-    }}
-    onMouseEnter={(e) => {
-      e.target.style.backgroundColor = "#c0392b"; // Darker red
-      e.target.style.transform = "scale(1.05)"; // Slight scaling effect
-      e.target.style.boxShadow = "0px 6px 12px rgba(0, 0, 0, 0.2)"; // Slightly larger shadow
-    }}
-    onMouseLeave={(e) => {
-      e.target.style.backgroundColor = "#e74c3c"; // Original red color
-      e.target.style.transform = "scale(1)"; // Reset to normal size
-      e.target.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.1)"; // Reset shadow
-    }}
-  >
-    Sign Out
-  </button>
-) : (
-  <button
-    onClick={() => navigate("/sign-in")}
-    style={{
-      marginTop: "1rem",
-      padding: "0.6rem 1.2rem",
-      backgroundColor: "#2ecc71",
-      color: "#fff",
-      border: "none",
-      borderRadius: "8px",
-      cursor: "pointer",
-      fontSize: "1rem",
-      transition: "background-color 0.3s, transform 0.3s, box-shadow 0.3s",
-      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-    }}
-    onMouseEnter={(e) => {
-      e.target.style.backgroundColor = "#27ae60"; // Darker green
-      e.target.style.transform = "scale(1.05)"; // Slight scaling effect
-      e.target.style.boxShadow = "0px 6px 12px rgba(0, 0, 0, 0.2)"; // Slightly larger shadow
-    }}
-    onMouseLeave={(e) => {
-      e.target.style.backgroundColor = "#2ecc71"; // Original green color
-      e.target.style.transform = "scale(1)"; // Reset to normal size
-      e.target.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.1)"; // Reset shadow
-    }}
-  >
-    Sign In
-  </button>
-)}
-
+            <button
+              onClick={handleSignOut}
+              style={{
+                marginTop: "1rem",
+                padding: "0.6rem 1.2rem",
+                backgroundColor: "#e74c3c",
+                color: "#fff",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                fontSize: "1rem",
+                transition:
+                  "background-color 0.3s, transform 0.3s, box-shadow 0.3s",
+                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = "#c0392b"; // Darker red
+                e.target.style.transform = "scale(1.05)"; // Slight scaling effect
+                e.target.style.boxShadow = "0px 6px 12px rgba(0, 0, 0, 0.2)"; // Slightly larger shadow
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = "#e74c3c"; // Original red color
+                e.target.style.transform = "scale(1)"; // Reset to normal size
+                e.target.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.1)"; // Reset shadow
+              }}
+            >
+              Sign Out
+            </button>
+          ) : (
+            <button
+              onClick={() => navigate("/sign-in")}
+              style={{
+                marginTop: "1rem",
+                padding: "0.6rem 1.2rem",
+                backgroundColor: "#2ecc71",
+                color: "#fff",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                fontSize: "1rem",
+                transition:
+                  "background-color 0.3s, transform 0.3s, box-shadow 0.3s",
+                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = "#27ae60"; // Darker green
+                e.target.style.transform = "scale(1.05)"; // Slight scaling effect
+                e.target.style.boxShadow = "0px 6px 12px rgba(0, 0, 0, 0.2)"; // Slightly larger shadow
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = "#2ecc71"; // Original green color
+                e.target.style.transform = "scale(1)"; // Reset to normal size
+                e.target.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.1)"; // Reset shadow
+              }}
+            >
+              Sign In
+            </button>
+          )}
         </div>
 
         {/* Divider */}
@@ -192,7 +193,14 @@ const HostProfile = () => {
             <p style={{ marginBottom: "1.5rem", color: "#555" }}>
               Are you sure you want to sign out?
             </p>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                gap: "1rem",
+                marginTop: "1rem",
+              }}
+            >
               <button
                 onClick={confirmSignOut}
                 style={{
@@ -200,14 +208,24 @@ const HostProfile = () => {
                   backgroundColor: "#e74c3c",
                   color: "#fff",
                   border: "none",
-                  borderRadius: "5px",
+                  borderRadius: "8px",
                   cursor: "pointer",
                   flex: 1,
-                  marginRight: "0.5rem",
+                  fontWeight: "bold",
+                  transition: "background-color 0.3s ease, transform 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = "#c0392b";
+                  e.target.style.transform = "scale(1.05)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = "#e74c3c";
+                  e.target.style.transform = "scale(1)";
                 }}
               >
                 Yes
               </button>
+
               <button
                 onClick={() => setShowSignOutPrompt(false)}
                 style={{
@@ -215,9 +233,19 @@ const HostProfile = () => {
                   backgroundColor: "#bdc3c7",
                   color: "#2c3e50",
                   border: "none",
-                  borderRadius: "5px",
+                  borderRadius: "8px",
                   cursor: "pointer",
                   flex: 1,
+                  fontWeight: "bold",
+                  transition: "background-color 0.3s ease, transform 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = "#95a5a6";
+                  e.target.style.transform = "scale(1.05)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = "#bdc3c7";
+                  e.target.style.transform = "scale(1)";
                 }}
               >
                 No
