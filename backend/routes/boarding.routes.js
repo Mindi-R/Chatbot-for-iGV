@@ -1,10 +1,10 @@
-import { Router } from "express";
-import { addBoarding, listBoarding } from "../controllers/boarding.controller.js";
-import { list } from "postcss";
+import express from 'express';
+import { addBoarding, listBoarding } from '../controllers/boarding.controller.js';
+import upload from '../middleware/upload.middleware.js';
 
-const boardingRouter = Router();
+const router = express.Router();
 
-boardingRouter.post('/add-boarding', addBoarding);
-boardingRouter.post('/list-boarding', listBoarding);
+router.post('/add-boarding', upload.array('images'), addBoarding);
+router.get('/list-boarding', listBoarding);
 
-export default boardingRouter;
+export default router;
