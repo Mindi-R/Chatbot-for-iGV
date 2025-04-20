@@ -8,7 +8,7 @@ import errorMiddleware from './middleware/error.middleware.js';
 import authRouter from './routes/auth.routes.js';
 import hostRouter from './routes/host.routes.js';
 import boardingRouter from './routes/boarding.routes.js';
-import connectToDatabase from './database/mongodb.js';
+import connectToDatabase from './config/mongodb.js';
 
 const app = express();
 

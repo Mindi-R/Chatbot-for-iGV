@@ -5,19 +5,19 @@ const ListBoarding = () => {
   const [boardings, setBoardings] = useState([]);
 
   const fetchBoarding = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:5500/api/boarding/list-boarding",
-        {},
-        { headers: { token: localStorage.getItem("token") } }
-      );
+    // try {
+    //   const response = await axios.post(
+    //     "http://localhost:5500/api/boarding/list-boarding",
+    //     {},
+    //     { headers: { token: localStorage.getItem("token") } }
+    //   );
 
-      if (response.data.success) {
-        setBoardings(response.data.data);
-      }
-    } catch (error) {
-      console.log("Error in fetching the boarding data", error);
-    }
+    //   if (response.data.success) {
+    //     setBoardings(response.data.data);
+    //   }
+    // } catch (error) {
+    //   console.log("Error in fetching the boarding data", error);
+    // }
   };
 
   useEffect(() => {

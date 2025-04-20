@@ -5,7 +5,7 @@ const connectToDatabase = async () => {
         console.log('DB connected'); 
     })
 
-    await mongoose.connect(`${process.env.MONGODB_URI}/UniNest`);
+    await mongoose.connect(`${process.env.DB_URI}/UniNest`);
 }
 
 export default connectToDatabase;
