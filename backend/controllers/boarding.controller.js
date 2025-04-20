@@ -63,8 +63,19 @@ const addBoarding = async (req, res) => {
 
 const listBoarding = async (req, res) => {
   try {
-    const token = req.headers.token;
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ success: false, message: "Unauthorized! Login again" });
+    }
+    const token = authHeader.split(" ")[1];
+
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      return res.status(401).json({ success: false, message: "Invalid token" });
+    }
+
     const hostId = decoded.id;
 
     const boardings = await boardingModel.find({ hostId });
@@ -79,5 +90,6 @@ const listBoarding = async (req, res) => {
     res.json({ success: false, message: error.message });
   }
 };
+
 
 export { addBoarding, listBoarding };
