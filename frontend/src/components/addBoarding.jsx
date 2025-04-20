@@ -59,7 +59,7 @@ const AddBoarding = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5500/api/boarding/add-boarding",
+        "http://localhost:5500/api/v1/boardings/add-boarding",
         data,
         { headers: { "Content-Type": "multipart/form-data", token: localStorage.getItem("token") } }
       );
