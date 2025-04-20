@@ -42,6 +42,8 @@ const AddBoarding = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Token:", localStorage.getItem("token"));
+
     const data = new FormData();
     data.append("type", type);
     data.append("address", formData.address);
@@ -58,11 +60,15 @@ const AddBoarding = () => {
     }
 
     try {
-      const response = await axios.post(
-        "http://localhost:5500/api/v1/boardings/add-boarding",
-        data,
-        { headers: { "Content-Type": "multipart/form-data", token: localStorage.getItem("token") } }
-      );
+      const response = await axios.post("http://localhost:5500/api/boarding/add-boarding", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      });
+
+      console.log(response.data);
+
       if (response.data.success) {
         toast.success("Boarding place added successfully!");
         setShowForm(false);

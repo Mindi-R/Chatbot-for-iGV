@@ -2,9 +2,9 @@ import express from 'express';
 import { addBoarding, listBoarding } from '../controllers/boarding.controller.js';
 import upload from '../middleware/upload.middleware.js';
 
-const router = express.Router();
+const boardingRouter = express.Router();
 
-router.post('/add-boarding', upload.array('images'), addBoarding);
-router.get('/list-boarding', listBoarding);
+boardingRouter.post('/add-boarding', upload.array('images'), addBoarding);
+boardingRouter.get('/list-boarding', listBoarding);
 
-export default router;
+export default boardingRouter;

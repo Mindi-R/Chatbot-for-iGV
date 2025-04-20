@@ -2,14 +2,39 @@ import boardingModel from "../models/boarding.model.js";
 import jwt from "jsonwebtoken";
 
 const addBoarding = async (req, res) => {
+  console.log("FILES RECEIVED:", req.files);
+  console.log("BODY RECEIVED:", req.body);
+
   try {
-    const token = req.headers.token;
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ success: false, message: "Unauthorized! Login again" });
+    }
+    const token = authHeader.split(" ")[1];
+    
+    if (!token) {
+      return res.status(401).json({ success: false, message: "Unauthorized! Login again" });
+    }
+
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      return res.status(401).json({ success: false, message: "Invalid token" });
+    }
+
     const hostId = decoded.id;
 
-    const { address, cost, type, availableCount, description, facilities } = req.body;
+    const {
+      address,
+      cost,
+      type,
+      availableCount,
+      description,
+      facilities,
+    } = req.body;
 
-    const images = req.files.map(file => file.path); // Cloudinary URLs
+    const images = req.files?.map((file) => file.path) || [];
 
     const boardingDetails = {
       hostId,
@@ -19,16 +44,20 @@ const addBoarding = async (req, res) => {
       availableCount,
       description,
       facilities,
-      images
+      images,
     };
 
     const newBoarding = new boardingModel(boardingDetails);
     await newBoarding.save();
 
-    res.json({ success: true, message: "Boarding place added successfully", data: newBoarding });
+    res.status(200).json({
+      success: true,
+      message: "Boarding place added successfully",
+      data: newBoarding,
+    });
   } catch (error) {
     console.error("Error adding boarding:", error);
-    res.json({ success: false, message: error.message });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
