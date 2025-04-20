@@ -6,11 +6,17 @@ const ListBoarding = () => {
 
   const fetchBoarding = async () => {
     try {
-      const response = await axios.post(
+      const response = await axios.get(
         "http://localhost:5500/api/boarding/list-boarding",
-        {},
-        { headers: { token: localStorage.getItem("token") } }
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
       );
+      
+
+      console.log(response.data);
 
       if (response.data.success) {
         setBoardings(response.data.data);
