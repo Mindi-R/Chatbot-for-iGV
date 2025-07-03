@@ -4,19 +4,21 @@ import GV_WHITE from "../assets/GV LOGO WHITE.png";
 const ChatMessage = ({ chat }) => {
   if (chat.isLoading) {
     return (
+      !chat.hideInChat && (
       <div className="loading-container">
         <span className="dot"></span>
         <span className="dot"></span>
         <span className="dot"></span>
       </div>
-    );
-  }
+    )
+  );
+  };
 
   return (
     <div
       className={`message-container flex ${
         chat.role === "model" ? "items-start space-x-2" : "justify-end"
-      }`}
+      } ${chat.isError ? "error-message" : ""}`}
     >
       {/* Bot Avatar */}
       {chat.role === "model" && (
