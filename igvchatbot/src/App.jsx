@@ -3,7 +3,7 @@ import "./index.css";
 import "./app.css";
 import Input from "./components/ChatForm.jsx";
 import ChatMessage from "./components/ChatMessage.jsx";
-import iGVinfo from "./iGVinfo.js";
+import { iGVinfo } from "./iGVinfo.js";
 
 import GV_COLOR from "./assets/GV LOGO COLOR.png";
 import GV_WHITE from "./assets/GV LOGO WHITE.png";
