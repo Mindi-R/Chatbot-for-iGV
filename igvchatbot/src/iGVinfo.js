@@ -70,8 +70,8 @@ Checklist
     - Coverlet, pillow cover and blanket
 
 Visa
-After approval, you can apply for the visa using the following link.
-http://www.eta.gov.lk/slvisa/
+After approval, you can apply for the visa using the following link:
+[http://www.eta.gov.lk/slvisa/](http://www.eta.gov.lk/slvisa/)
 Please contact us for further details and support, before you apply for the visa
 
 IPS - Incoming Preparation Seminar
@@ -102,4 +102,4 @@ I can help you with:
 • Future opportunities with AIESEC
 • Any other questions or concerns you may have.
 
-Let's make your Global Volunteer experience in Sri Lanka a life-changing and impactful journey!`
+Let's make your Global Volunteer experience in Sri Lanka a life-changing and impactful journey!`;
