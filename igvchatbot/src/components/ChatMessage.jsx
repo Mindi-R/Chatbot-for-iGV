@@ -1,18 +1,10 @@
 import GV_WHITE from "../assets/GV LOGO WHITE.png";
 
-
 const ChatMessage = ({ chat }) => {
+  // Don't render loading messages - they're handled separately
   if (chat.isLoading) {
-    return (
-      !chat.hideInChat && (
-      <div className="loading-container">
-        <span className="dot"></span>
-        <span className="dot"></span>
-        <span className="dot"></span>
-      </div>
-    )
-  );
-  };
+    return null;
+  }
 
   return (
     <div

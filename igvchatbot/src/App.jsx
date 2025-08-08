@@ -11,61 +11,86 @@ import GV_WHITE from "./assets/GV LOGO WHITE.png";
 const App = () => {
   const [chatHistory, setChatHistory] = useState([
     {
-    hideInChat: true,
-    role: "model",
-    text: iGVinfo
-  }
-]);
+      hideInChat: true,
+      role: "model",
+      text: iGVinfo,
+    },
+  ]);
   const [showchatbot, setShowChatbot] = useState(false);
   const chatBodyRef = useRef(null); // Ref for the chat body
 
   const generateBotResponse = async (history) => {
-    // Helper function to update the chat history
-    const updateHistory = (text,isError = false) => {
-      setChatHistory((prev) => [
-        ...prev.filter((msg) => msg.text !== "Thinking ..."),
-        { role: "model", text, isError },
+    // Add loading message with animated dots
+    setChatHistory((prev) => [
+      ...prev,
+      { role: "model", text: "", isLoading: true },
+    ]);
 
-      ]);
-    };
+    // Get the latest user message
+    const userMessage = history[history.length - 1].text;
 
-    history = history.map(({ role, text }) => ({ role, parts: [{ text }] }));
+    const requestBody = {
+      contents: [
+        {
+          role: "user",
+          parts: [
+            {
+              text: `You are an iGV buddy chatbot for AIESEC in Colombo South. You are friendly and helpful. 
 
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        contents: history,
-      }),
+KNOWLEDGE BASE:
+${iGVinfo}
+
+USER QUESTION: ${userMessage}
+
+INSTRUCTIONS:
+- For questions about AIESEC, Global Volunteer programs, Sri Lanka, or related topics, use the knowledge base above
+- For general greetings, small talk, or friendly conversation, respond naturally and warmly
+- Keep responses short and engaging
+- If someone asks about specific information not in your knowledge base, say "I don't have that specific information. Please contact AIESEC in Colombo South directly."
+- Always try to guide the conversation back to how you can help with their Global Volunteer experience`,
+            },
+          ],
+        },
+      ],
     };
 
     try {
-      // Make the API call to get the bot response
-      const response = await fetch(
-        import.meta.env.VITE_API_URL,
-        requestOptions
-      );
-      const data = await response.json();
+      const response = await fetch(import.meta.env.VITE_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestBody),
+      });
+
       if (!response.ok) {
-        throw new Error(data.error.message || "Something went wrong");
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+
+      const data = await response.json();
       const apiResponseText = data.candidates[0].content.parts[0].text
         .replace(/\*\*(.*?)\*\*/g, "$1")
         .trim();
-      updateHistory(apiResponseText);
+
+      setChatHistory((prev) => [
+        ...prev.filter((msg) => !msg.isLoading),
+        { role: "model", text: apiResponseText },
+      ]);
     } catch (error) {
-      updateHistory(error.message,true);
+      setChatHistory((prev) => [
+        ...prev.filter((msg) => !msg.isLoading),
+        { role: "model", text: error.message, isError: true },
+      ]);
     }
   };
 
   // Auto-scroll to the newest message
   useEffect(() => {
     if (chatBodyRef.current) {
-      chatBodyRef.current.scrollTo({top: chatBodyRef.current.scrollHeight, behavior: "smooth"});
+      chatBodyRef.current.scrollTo({
+        top: chatBodyRef.current.scrollHeight,
+        behavior: "smooth",
+      });
     }
-  }, [chatHistory]); 
+  }, [chatHistory]);
 
   return (
     <div className="min-h-screen">
@@ -84,9 +109,7 @@ const App = () => {
       {showchatbot && (
         <div className="chatbot-popup fixed bottom-20 right-4 bg-white rounded-lg shadow-lg max-w-3xl w-full max-w-md max-h-[80vh] overflow-y-auto z-50">
           {/* chatbot header */}
-          <div
-            className="chat-header flex justify-between items-start bg-[#F85A40] text-white p-4 rounded-t-lg relative"
-          >
+          <div className="chat-header flex justify-between items-start bg-[#F85A40] text-white p-4 rounded-t-lg relative">
             {/* Logo with white background */}
             <div className="logo-container bg-white p-1 rounded-full">
               <img
@@ -127,15 +150,17 @@ const App = () => {
               <div className="bot-message bg-gray-100 p-3 rounded-lg max-w-sm">
                 <p className="bot-message-text text-gray-800">
                   Hi there!👋 <br />
-                  I’m your iGV Buddy from Colombo South 🌍. Need help with
+                  I'm your iGV Buddy from Colombo South 🌍. Need help with
                   projects, applications, or approval process?
                 </p>
               </div>
             </div>
 
-            {chatHistory.map((chat, index) => (
-              <ChatMessage key={index} chat={chat} />
-            ))}
+            {chatHistory
+              .filter((chat) => !chat.hideInChat)
+              .map((chat, index) => (
+                <ChatMessage key={index} chat={chat} />
+              ))}
           </div>
 
           {/* chatbot footer */}
