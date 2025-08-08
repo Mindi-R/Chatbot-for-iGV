@@ -29,7 +29,41 @@ const ChatMessage = ({ chat }) => {
           chat.role === "model" ? "bg-gray-100" : "bg-blue-100"
         } p-3 rounded-lg max-w-sm`}
       >
-        <p className="message-text text-gray-800">{chat.text}</p>
+        {/* Format text with bullet points */}
+        <div className="message-text text-gray-800">
+          {chat.text.split("\n").map((line, index) => {
+            // Check if line starts with bullet point markers
+            if (line.trim().match(/^[•·▪▫‣⁃]\s/)) {
+              return (
+                <div key={index} className="flex items-start mb-1">
+                  <span className="mr-2">•</span>
+                  <span>{line.replace(/^[•·▪▫‣⁃]\s/, "").trim()}</span>
+                </div>
+              );
+            }
+            // Check if line starts with dash or asterisk
+            else if (line.trim().match(/^[-*]\s/)) {
+              return (
+                <div key={index} className="flex items-start mb-1">
+                  <span className="mr-2">•</span>
+                  <span>{line.replace(/^[-*]\s/, "").trim()}</span>
+                </div>
+              );
+            }
+            // Regular line
+            else if (line.trim()) {
+              return (
+                <p key={index} className="mb-1">
+                  {line}
+                </p>
+              );
+            }
+            // Empty line
+            else {
+              return <br key={index} />;
+            }
+          })}
+        </div>
       </div>
     </div>
   );

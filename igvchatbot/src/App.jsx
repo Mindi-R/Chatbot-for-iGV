@@ -17,14 +17,12 @@ const App = () => {
     },
   ]);
   const [showchatbot, setShowChatbot] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const chatBodyRef = useRef(null); // Ref for the chat body
 
   const generateBotResponse = async (history) => {
-    // Add loading message with animated dots
-    setChatHistory((prev) => [
-      ...prev,
-      { role: "model", text: "", isLoading: true },
-    ]);
+    // Set loading state
+    setIsLoading(true);
 
     // Get the latest user message
     const userMessage = history[history.length - 1].text;
@@ -71,14 +69,16 @@ INSTRUCTIONS:
         .trim();
 
       setChatHistory((prev) => [
-        ...prev.filter((msg) => !msg.isLoading),
+        ...prev,
         { role: "model", text: apiResponseText },
       ]);
     } catch (error) {
       setChatHistory((prev) => [
-        ...prev.filter((msg) => !msg.isLoading),
+        ...prev,
         { role: "model", text: error.message, isError: true },
       ]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -161,6 +161,26 @@ INSTRUCTIONS:
               .map((chat, index) => (
                 <ChatMessage key={index} chat={chat} />
               ))}
+
+            {/* Loading indicator */}
+            {isLoading && (
+              <div className="bot-message-container flex items-start space-x-2">
+                <div className="avatar-container bg-[#F85A40] p-2 rounded-full flex-shrink-0 -ml-2">
+                  <img
+                    src={GV_WHITE}
+                    alt="Bot Avatar"
+                    className="h-8 w-8 object-contain rounded-full"
+                  />
+                </div>
+                <div className="bot-message bg-gray-100 p-3 rounded-lg max-w-sm">
+                  <div className="loading-container">
+                    <span className="dot"></span>
+                    <span className="dot"></span>
+                    <span className="dot"></span>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* chatbot footer */}
