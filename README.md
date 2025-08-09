@@ -148,3 +148,21 @@ The built files will be in the `dist/` directory, ready for deployment to any st
 ---
 
 Made with ❤️ for the AIESEC Global Volunteer community
+## 🚀 New Feature Demo
+
+This is a demonstration of how to add new features and create pull requests.
+
+- Feature branches should be created from `main`
+- Pull requests should target `master`
+- After merging to `master`, sync back to `main`
+
+### Example workflow:
+```bash
+git checkout main
+git checkout -b feature/my-new-feature
+# Make changes
+git add .
+git commit -m "Add my new feature"
+git push origin feature/my-new-feature
+# Create PR: feature/my-new-feature -> master
+```
